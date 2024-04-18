@@ -2,18 +2,31 @@ document.addEventListener('DOMContentLoaded', function () {
   const maxDigits = 10;
   let firstNum = '';
   let secondNum = '';
-  let operator;
+  let operator = '';
 
   const screen = document.querySelector('.calculator-screen');
   var btnNumber = document.querySelectorAll('.btn.number');
+
   btnNumber.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      if (firstNum.length < maxDigits) {
-        value = parseFloat(this.textContent);
+      if (operator === '' && operator !== '=') {
+        if (firstNum.length < maxDigits) {
+          value = parseFloat(this.textContent);
 
-        firstNum += value;
-        console.log('El valor del boton presionado es: ', firstNum);
-        screen.innerHTML = firstNum;
+          firstNum += value;
+          console.log('first number: ', firstNum);
+          screen.innerHTML = firstNum;
+        }
+      } else if (operator !== '=') {
+        if (secondNum.length < maxDigits) {
+          value = parseFloat(this.textContent);
+
+          secondNum += value;
+          console.log('second number: ', secondNum);
+          screen.innerHTML = firstNum + ' ' + operator + ' ' + secondNum;
+        }
+      } else {
+        operate(firstNum, secondNum, operator);
       }
     });
   });
@@ -22,13 +35,13 @@ document.addEventListener('DOMContentLoaded', function () {
   btnOperator.forEach(function (btn) {
     btn.addEventListener('click', function () {
       operator = this.textContent;
-      console.log('El valor del boton presionado es: ', operator);
-      screen.innerHTML = operator;
+      console.log('operator: ', operator);
+      screen.innerHTML = firstNum + ' ' + operator + ' ' + secondNum;
     });
   });
 
   function add(a, b) {
-    return a + b;
+    return parseFloat(a) + parseFloat(b);
   }
 
   function subtract(a, b) {
@@ -58,8 +71,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function buttonClicked(event) {
-    displayValue += event.target.textContent;
-    display.textContent = displayValue;
-  }
+  var btnEqual = document.querySelector('.btn.equal');
+  btnEqual.addEventListener('click', function () {
+    if (firstNum !== '' && secondNum !== '') {
+      const result = operate(firstNum, secondNum, operator);
+      screen.innerHTML = result;
+      firstNum = result.toString();
+      secondNum = '';
+      operator = '';
+    }
+  });
+
+  var btnClear = document.querySelector('.btn.clear');
+  btnClear.addEventListener('click', function () {
+    firstNum = '';
+    secondNum = '';
+    operator = '';
+    screen.innerHTML = '';
+  });
 });
