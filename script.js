@@ -53,7 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function divide(a, b) {
-    return a / b;
+    if (a == 0 && b == 0) {
+      return 'Math Error! XD';
+    } else {
+      return a / b;
+    }
   }
 
   function operate(firstNum, secondNum, operator) {
@@ -76,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (firstNum !== '' && secondNum !== '') {
       const result = operate(firstNum, secondNum, operator);
       screen.innerHTML = result;
-      firstNum = result.toString();
+      firstNum = '';
       secondNum = '';
       operator = '';
     }
@@ -87,6 +91,33 @@ document.addEventListener('DOMContentLoaded', function () {
     firstNum = '';
     secondNum = '';
     operator = '';
-    screen.innerHTML = '';
+    screen.innerHTML = 0;
+  });
+
+  var btnDelete = document.querySelector('.btn.delete');
+  btnDelete.addEventListener('click', function () {
+    var screenContent = document.querySelector('.calculator-screen').innerHTML;
+
+    // Verificar si el último carácter es un operador y actualizar el operador y secondNum
+    if (screenContent.length > 0) {
+      var lastChar = screenContent.charAt(screenContent.length - 1);
+      if (
+        lastChar === '+' ||
+        lastChar === '-' ||
+        lastChar === '*' ||
+        lastChar === '/'
+      ) {
+        operator = '';
+        // Restablecer secondNum solo si el último carácter eliminado era un operador
+        secondNum = '';
+      }
+    }
+
+    // Eliminar el último carácter del contenido
+    var newContent = screenContent.slice(0, -1);
+    document.querySelector('.calculator-screen').innerHTML = newContent;
+
+    // Actualizar firstNum con el nuevo contenido
+    firstNum = newContent;
   });
 });
