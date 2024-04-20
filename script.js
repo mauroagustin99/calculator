@@ -9,21 +9,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   btnNumber.forEach(function (btn) {
     btn.addEventListener('click', function () {
+      value = this.textContent;
       if (operator === '' && operator !== '=') {
         if (firstNum.length < maxDigits) {
-          value = parseFloat(this.textContent);
-
-          firstNum += value;
-          console.log('first number: ', firstNum);
-          screen.innerHTML = firstNum;
+          if (value === '.') {
+            if (!firstNum.includes('.')) {
+              firstNum += value;
+            }
+          } else {
+            firstNum += value;
+            console.log('first number: ', firstNum);
+            screen.textContent = parseFloat(firstNum);
+          }
         }
       } else if (operator !== '=') {
         if (secondNum.length < maxDigits) {
-          value = parseFloat(this.textContent);
-
-          secondNum += value;
-          console.log('second number: ', secondNum);
-          screen.innerHTML = firstNum + ' ' + operator + ' ' + secondNum;
+          if (value === '.') {
+            if (!secondNum.includes('.')) {
+              secondNum += value;
+            }
+          } else {
+            secondNum += value;
+            console.log('second num: ', secondNum);
+          }
+          screen.innerHTML =
+            parseFloat(firstNum) + ' ' + operator + ' ' + parseFloat(secondNum);
         }
       } else {
         operate(firstNum, secondNum, operator);
@@ -80,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (firstNum !== '' && secondNum !== '') {
       const result = operate(firstNum, secondNum, operator);
       screen.innerHTML = result;
-      firstNum = '';
+      firstNum = result;
       secondNum = '';
       operator = '';
     }
@@ -121,3 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     firstNum = newContent;
   });
 });
+
+//Issues:
+//Fix (overflow)
+//keyboard support
